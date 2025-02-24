@@ -1,21 +1,31 @@
 import './App.css';
-import { TodoItem } from './components';
+import { Toast, TodoItem } from './components';
 import { TodoData } from './constants';
-import { useTodo } from './hooks';
+import { useTodo, useToast } from './hooks';
 
 function App() {
+  const { message, showToast, hideToast } = useToast();
   const { todos, toggleTodo, deleteTodo } = useTodo(TodoData);
 
   return (
     <div className="todo-container">
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          onDelete={() => deleteTodo(todo.id)}
-          onToggle={() => toggleTodo(todo.id)}
-        />
-      ))}
+      <div className="todo-list">
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            onDelete={() => {
+              deleteTodo(todo.id);
+              showToast(`Todo ${todo.text} is deleted`);
+            }}
+            onToggle={() => {
+              toggleTodo(todo.id);
+              showToast(`Todo ${todo.text} is ${todo.done ? 'completed' : 'not completed'}`);
+            }}
+          />
+        ))}
+      </div>
+      <Toast message={message ?? ''} isOpen={!!message} close={hideToast} />
     </div>
   );
 }
