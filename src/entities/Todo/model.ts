@@ -10,8 +10,9 @@ export type Todo = {
   createdAt: string; // ISO 날짜 문자열
 };
 
-const MAX_TODO_TEXT_LENGTH = 50;
+type IsValidTodoText = (text: TodoText) => boolean;
 
-export function isValidTodoText(text: TodoText): boolean {
-  return text.trim().length > 0 && text.trim().length <= MAX_TODO_TEXT_LENGTH;
-}
+export const isValidTodoText: IsValidTodoText = (text) => {
+  const MAX_TODO_TEXT_LENGTH = 50;
+  return text.length > 0 && text.length <= MAX_TODO_TEXT_LENGTH;
+};
